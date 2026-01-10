@@ -429,20 +429,6 @@ async function fetchWeatherData(city) {
     const response = await fetch(apiUrl);
     weatherData = await response.json();
     afiseazaVremeaCurenta(weatherData);
-    // afiseazaPrognoza();
-    // console.log(weatherData, "date");
-  } catch {
-    console.log("hey am prins eroarea");
-  }
-}
-
-async function fetchWeatherForecast(city) {
-  const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric&lang=ro`;
-
-  try {
-    const response = await fetch(apiUrl);
-    weatherData = await response.json();
-    afiseazaPrognoza();
     // console.log(weatherData, "date");
   } catch {
     console.log("hey am prins eroarea");
@@ -454,8 +440,8 @@ function updateCity(city) {
   console.log(currentCity, "oras");
   currentCity.textContent = city;
   saveToLocalStorage(city);
+  fetchWeatherForecast(city);
   fetchWeatherData(city);
-  fetchWeatherForecast (city);
 }
 
 function saveToLocalStorage(city) {
@@ -475,19 +461,16 @@ window.onload = function () {
   loadFromLocalStorage();
 };
 
-const scrollBtn = document.getElementById("scrollToTop");
+async function fetchWeatherForecast(city) {
+  const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&lang=ro&units=metric&appid=${apiKey}&units=metric&lang=ro`
 
-// 1. Aratam butonul când utilizatorul scrollează 200px în jos
-window.onscroll = function() {
-  if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
-    scrollBtn.style.display = "block";
-  } else {
-    scrollBtn.style.display = "none";
+  try {
+    const response = await fetch(apiUrl);
+    const forecastData = await response.json();
+    afiseazaPrognoza(forecastData);
+    console.log(forecastData)
+    // console.log(weatherData, "date");
+  } catch {
+    console.log("hey am prins eroarea");
   }
-};
-scrollBtn.addEventListener("click", () => {
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth" // Această linie face scroll-ul lin, nu brusc
-  });
-});
+}
