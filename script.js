@@ -83,18 +83,44 @@ function afiseazaVremeaCurenta(apiData) {
 
   vremeaCurenta.innerHTML = `<div class="temperature-container">
               <strong class="city fs-2"> ${apiData.name}</strong>
-              <p class="day-time-container fs-4"><strong> ${getDayOfTheWeek(apiData.dt)}</strong> ,${getHour(apiData.dt)}</p>
+              <p class="day-time-container fs-4"><strong> ${getDayOfTheWeek(
+                apiData.dt
+              )}</strong> ,${getHour(apiData.dt)}</p>
               <strong class="temperature fs-1">${apiData.main.temp}°C</strong>
-              <img class="weather-icon" src="http://openweathermap.org/img/wn/${apiData.weather[0].icon}@2x.png">
+              <img class="weather-icon" src="http://openweathermap.org/img/wn/${
+                apiData.weather[0].icon
+              }@2x.png">
             </div>
             <div class="temperature-details-container">
               <p class="real-feel-label fs-5"> Real Feel: <strong class="real-feel">-12°C</strong></p>
               <p class="description fs-5">${apiData.weather[0].description}</p>
-              <p class="wind-label fs-5">Vant:<strong class="wind">${apiData.wind.speed}km/h</strong></p>
+              <p class="wind-label fs-5">Vant:<strong class="wind">${
+                apiData.wind.speed
+              }km/h</strong></p>
             </div>`;
 }
 
-function afiseazaPrognoza() {
+function afiseazaPrognoza(data) {
+  const { list } = data;
+
+  // Avem nevoie de un obiect in care sa grupam predictiile pe zile:
+  const daysMap = {};
+
+  // Iteram prin cele 40 de predictii primite de la server.
+  list.forEach((element) => {
+    // Extragem data predictiei.
+    const { dt } = element;
+    // getDayOfTheWeek este creata de noi, in utils/date.
+    const day = getDayOfTheWeek(dt);
+    // Daca deja avem ziua saptamanii in obiect, ii aduagam o noua predictie.
+    if (daysMap[day]) {
+      daysMap[day].push(element);
+      // Altfel, adaugam ziua saptamanii in obiect, alaturi de noua predictie.
+    } else {
+      daysMap[day] = [element];
+    }
+  });
+  console.log(daysMap);
   const prognoza = document.querySelector(".weather-forecast");
   console.log(prognoza, "Prognoza pe 5 zile");
   prognoza.innerHTML = `<div class="container">
@@ -462,13 +488,13 @@ window.onload = function () {
 };
 
 async function fetchWeatherForecast(city) {
-  const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&lang=ro&units=metric&appid=${apiKey}&units=metric&lang=ro`
+  const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&lang=ro&units=metric&appid=${apiKey}&units=metric&lang=ro`;
 
   try {
     const response = await fetch(apiUrl);
     const forecastData = await response.json();
     afiseazaPrognoza(forecastData);
-    console.log(forecastData)
+    //console.log(forecastData)
     // console.log(weatherData, "date");
   } catch {
     console.log("hey am prins eroarea");
