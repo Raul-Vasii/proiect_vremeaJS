@@ -18,6 +18,7 @@
       crossorigin="anonymous"
     />
     <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer> </script>
   </head>
   <body>
     <header class="bg-primary d-flex justify-content-center align-items-center">
@@ -35,7 +36,7 @@
             apoi scrollează pentru a vedea vremea din orașul tău.
           </p>
           <p class="text-center fs-5">
-            Orașul tău curent este <strong>București.</strong>
+            Orașul tău curent este <strong class="current-city"> București.</strong>
           </p>
           <div class="dropdown d-flex justify-content-center">
             <button
@@ -49,12 +50,14 @@
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
               <li>
-                <button class="dropdown-item bucharest">București</button>
+                <button class="dropdown-item bucharest" onclick="updateCity('București')">București</button>
               </li>
               <li>
-                <button class="dropdown-item timisoara">Timișoara</button>
+                <button class="dropdown-item timisoara"onclick="updateCity('Timișoara')" >Timișoara</button>
               </li>
-              <li><button class="dropdown-item oradea">Oradea</button></li>
+              <li><button class="dropdown-item oradea" onclick="updateCity('Oradea')">Oradea</button></li>
+              <li><button class="dropdown-item suceava" onclick="updateCity('Suceava')">Suceava</button></li>
+              <li><button class="dropdown-item brasov" onclick="updateCity('Brasov')">Brasov</button></li>
             </ul>
           </div>
         </div>
